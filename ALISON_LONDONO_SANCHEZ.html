@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgecoldEx - Alison Londoño</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --azul-oscuro: #0A2463;
+            --mostaza: #D4A017;
+            --blanco: #FFFFFF;
+            --gris-claro: #F5F5F5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--gris-claro);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        /* Pantalla de carga del logo */
+        .logo-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--blanco);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeOut 0.5s ease-out 1.5s forwards;
+        }
+        
+        .logo-loading img {
+            width: min(200px, 80vw);
+            animation: zoomIn 1s ease-out forwards;
+        }
+        
+        @keyframes zoomIn {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            70% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        /* Contenedor principal */
+        .main-container {
+            width: 100%;
+            max-width: 420px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* Estilos de la tarjeta */
+        .vcard-container {
+            width: 100%;
+            background-color: var(--blanco);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .profile-section {
+            position: relative;
+            height: 100px; /* Altura fija para la sección azul */
+            background-color: var(--azul-oscuro);
+        }
+        
+        .profile-image-container {
+            position: absolute;
+            top: 50px; /* Posición para superponer entre azul y blanco */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: var(--blanco);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 5px solid var(--blanco);
+            box-sizing: content-box;
+            z-index: 2;
+        }
+        
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .info-section {
+            padding: 90px 25px 25px; /* Más espacio arriba para la imagen */
+        }
+        
+        /* Resto de estilos */
+        .name {
+            font-size: clamp(20px, 5vw, 24px);
+            font-weight: 700;
+            color: var(--azul-oscuro);
+            margin-bottom: 8px;
+            text-align: center;
+            line-height: 1.3;
+            margin-top: 20px; /* Más espacio entre imagen y nombre */
+        }
+        
+        .position {
+            font-size: clamp(15px, 4vw, 17px);
+            color: var(--mostaza);
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+        
+        .action-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blanco);
+            font-size: 19px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .email-btn {
+            background-color: var(--azul-oscuro);
+        }
+        
+        .phone-btn {
+            background-color: #28a745;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
+        
+        .contact-info {
+            margin-bottom: 25px;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .info-icon {
+            color: var(--mostaza);
+            margin-right: 15px;
+            font-size: 18px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        
+        .info-text {
+            flex: 1;
+            color: #555;
+            font-size: clamp(14px, 4vw, 15px);
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        
+        .info-text a {
+            color: var(--azul-oscuro);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .info-text a:hover {
+            color: var(--mostaza);
+            text-decoration: underline;
+        }
+        
+        .footer-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+        }
+        
+        .save-btn, .share-btn {
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            flex: 1;
+            justify-content: center;
+        }
+        
+        .save-btn {
+            background-color: var(--azul-oscuro);
+            color: var(--blanco);
+        }
+        
+        .share-btn {
+            background-color: var(--gris-claro);
+            color: var(--azul-oscuro);
+            border: 1px solid #ddd;
+        }
+        
+        .save-btn:hover, .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (max-width: 400px) {
+            .profile-section {
+                height: 100px; /* Mantenemos la altura */
+            }
+            
+            .profile-image-container {
+                width: 130px;
+                height: 130px;
+                top: 45px; /* Posición superpuesta ajustada */
+            }
+            
+            .info-section {
+                padding: 80px 20px 20px; /* Ajuste del espacio */
+            }
+            
+            .name {
+                margin-top: 15px; /* Espacio entre imagen y nombre */
+            }
+            
+            .action-buttons {
+                gap: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .footer-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .profile-image-container {
+                width: 120px;
+                height: 120px;
+                top: 40px; /* Ajuste fino para móviles pequeños */
+            }
+            
+            .info-section {
+                padding: 75px 15px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de carga del logo -->
+    <div class="logo-loading">
+        <img src="https://producomex.com/wp-content/uploads/2020/01/AGECOLDEX.jpg" alt="Logo AgecoldEx">
+    </div>
+    
+    <!-- Contenido principal -->
+    <div class="main-container">
+        <div class="vcard-container">
+            <div class="profile-section">
+                <div class="profile-image-container">
+                    <img class="profile-image" src="https://raw.githubusercontent.com/Lexa2161/FT-VCard/refs/heads/main/ALISON%20LONDO%C3%91O%20.JPG" alt="Foto de ALISON LONDOÑO SÁNCHEZ">
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <h1 class="name">ALISON LONDOÑO SÁNCHEZ</h1>
+                <h2 class="position">Gerente Comercial Regional</h2>
+                
+                <div class="action-buttons">
+                    <button class="action-btn email-btn" title="Enviar correo">
+                        <i class="fas fa-envelope"></i>
+                    </button>
+                    <button class="action-btn phone-btn" title="Llamar">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="action-btn whatsapp-btn" title="WhatsApp">
+                        <i class="fab fa-whatsapp"></i>
+                    </button>
+                </div>
+                
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-mobile-alt info-icon"></i>
+                        <div class="info-text">3104514173</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope info-icon"></i>
+                        <div class="info-text"><a href="mailto:alison.londono@agecoldex.com">alison.londono@agecoldex.com</a></div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-globe info-icon"></i>
+                        <div class="info-text"><a href="https://www.agecoldex.com/site/" target="_blank">https://www.agecoldex.com/site/</a></div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt info-icon"></i>
+                        <div class="info-text">Cl. 41 Nte. #4 Norte-11, Cali, Valle del Cauca</div>
+                    </div>
+                </div>
+                
+                <div class="footer-buttons">
+                    <button class="save-btn">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <button class="share-btn">
+                        <i class="fas fa-share-alt"></i> Compartir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configurar botones de acción
+        document.querySelector('.email-btn').onclick = () => window.location.href = 'mailto:alison.londono@agecoldex.com';
+        document.querySelector('.phone-btn').onclick = () => window.location.href = 'tel:3104514173';
+        document.querySelector('.whatsapp-btn').onclick = () => window.open('https://wa.me/573104514173', '_blank');
+        
+        // Configurar botón de guardar
+        document.querySelector('.save-btn').onclick = () => {
+            const vcard = `BEGIN:VCARD
+VERSION:3.0
+FN:ALISON LONDOÑO SÁNCHEZ
+TITLE:Gerente Comercial Regional
+TEL;TYPE=CELL:3104514173
+EMAIL:alison.londono@agecoldex.com
+URL:https://www.agecoldex.com/site/
+ADR:;;Cl. 41 Nte. #4 Norte-11, Cali, Valle del Cauca
+END:VCARD`;
+            
+            const blob = new Blob([vcard], { type: 'text/vcard' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ALISON_LONDONO_SANCHEZ.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        };
+        
+        // Configurar botón de compartir
+        document.querySelector('.share-btn').onclick = () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Contacto: ALISON LONDOÑO SÁNCHEZ',
+                    text: 'Datos de contacto de ALISON LONDOÑO SÁNCHEZ - Gerente Comercial Regional en AgecoldEx',
+                    url: 'https://bit.ly/FranHolAGX'
+                }).catch(err => {
+                    console.error('Error al compartir:', err);
+                    fallbackShare();
+                });
+            } else {
+                fallbackShare();
+            }
+        };
+        
+        function fallbackShare() {
+            const shareText = `Nombre: ALISON LONDOÑO SÁNCHEZ\nCargo: Gerente Comercial Regional\nTeléfono: 3104514173\nEmail: alison.londono@agecoldex.com\nSitio web: https://www.agecoldex.com/site/\nDirección: Cl. 41 Nte. #4 Norte-11, Cali, Valle del Cauca`;
+            alert('Copie los siguientes datos para compartir:\n\n' + shareText);
+        }
+    </script>
+</body>
+</html>
